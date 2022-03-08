@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js"
+      integrity="sha512-nIwdJlD5/vHj23CbO2iHCXtsqzdTTx3e3uAmpTm4x2Y8xCIFyWu4cSIV8GaGe2UNVq86/1h9EgUZy7tn243qdA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    />
+    <script src="/js/app.js"></script>
+  </head>
+  <body class="mx-auto p-10">
+    <div class="container">
+      <div class="card" x-data="todoApp()">
+        <div class="card-body">
+          <form @submit.prevent="addTask">
+            <div class="form-group">
+              <label for="task">Task</label>
+              <input
+                id="task"
+                class="form-control"
+                type="text"
+                name="task"
+                x-model="newTask"
+                placeholder="Go to market..."
+              />
+            </div>
+          </form>
+          <div class="mt-5">
+            <ul class="list-group" x-show="filteredTaks.length">
+              <li class="list-group-item active">
+                <div class="form-check form-check-inline">
+                  <input
+                    id="all-complete"
+                    class="form-check-input"
+                    type="checkbox"
+                    name=""
+                    @click="markAllComplete"
+                    value="true"
+                    autocomplete="false"
+                  />
+                  <label for="all-complete" class="form-check-label"
+                    >Mark all complete</label
+                  >
+                </div>
+              </li>
+
+              <template x-for="(task, index) in filteredTaks" x-key="index">
+                <li class="list-group-item">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name=""
+                      x-model="task.completed"
+                      @click="completeTask(task)"
+                      value="true"
+                      autocomplete="false"
+                    />
+                    <label
+                      x-show="editable != task.id"
+                      @dblclick="setEditable(task)"
+                      x-text="task.body"
+                      class="form-check-label text-muted"
+                      :class="{'text-decoration-line-through': task.completed}"
+                    ></label>
+                    <div class="form-group" x-show="editable == task.id">
+                      <input
+                        type="text"
+                        x-model="task.body"
+                        @keyup.enter="updateTask(task)"
+                        @keyup.escape="cancelTaskEdit(task)"
+                        @click.away="cancelTaskEdit(task)"
+                        class="form-control"
+                        autofocus
+                      />
+                    </div>
+                  </div>
+                  <span
+                    class="float-end"
+                    style="cursor: pointer"
+                    @click="deleteTask(task)"
+                    >&times;</span
+                  >
+                </li>
+              </template>
+            </ul>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="d-flex justify-content-between">
+            <h6>Total tasks: <span x-text="activeTasks.length"> </span></h6>
+            <div class="btn-group" role="group" aria-label="action">
+              <button
+                class="btn btn-outline-primary btn-sm"
+                :class="{ active : filter == 'all' }"
+                @click="filter = 'all'"
+              >
+                All
+              </button>
+              <button
+                class="btn btn-outline-primary btn-sm"
+                :class="{ active : filter == 'complete' }"
+                @click="filter = 'complete'"
+              >
+                Complete
+              </button>
+              <button
+                class="btn btn-outline-primary btn-sm"
+                :class="{ active : filter == 'active' }"
+                @click="filter = 'active'"
+              >
+                Active
+              </button>
+            </div>
+            <a href="#" class="" @click.prevent="clearCompletedTasks"
+              >Clear completed Task</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <script></script>
+  </body>
+</html>
